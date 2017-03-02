@@ -2,7 +2,7 @@
 """
 Created on Thu Feb 16 21:25:36 2017
 
-@author: Zhangping He
+@author: Zhendong Zhang
 """
 import numpy as np
 import theano

@@ -67,18 +67,20 @@ def build_fft_scale(x,y,size):
     p_scale = ll.get_output(net)
     #p_scale = theano.gradient.disconnected_grad(p_scale)
     net_scale = ll.InputLayer((None,10,25,25),p_scale)
-    net_scale = ll.DenseLayer(net_scale,50,b=None,nonlinearity=l.nonlinearities.tanh)
-    W.append(net_scale.get_params()[0])
+    net_scale = ll.DenseLayer(net_scale,100,b=None,nonlinearity=l.nonlinearities.tanh)
+    W.append(net_scale.get_params(regularizable=True)[0])
     net_scale = ll.DenseLayer(net_scale,2,b=None,nonlinearity=None)
     # return heatmap with 2 times upsample of size
+    net_heat = ll.DenseLayer(net,500,b=None,nonlinearity=l.nonlinearities.tanh)
+    W.append(net_heat.get_params(regularizable=True)[0])
     net_heat = ll.DenseLayer(net,size**2,b=None,nonlinearity=None)
-    W.append(net_heat.get_params()[0])
+    W.append(net_heat.get_params(regularizable=True)[0])
     net_heat = ll.BatchNormLayer(net_heat)
     net_heat = ll.ReshapeLayer(net_heat,([0],1,size,size))
     net_heat = ll.Deconv2DLayer(net_heat,64,(5,5),(2,2),b=None,crop ='same',nonlinearity=None)
     net_heat = ll.BatchNormLayer(net_heat)
     net_heat = ll.Conv2DLayer(net_heat,1,(3,3),b=None,pad='same',nonlinearity=None)
-    W.append(net_heat.get_params()[0])
+    W.append(net_heat.get_params(regularizable=True)[0])
     return pnet, net_scale, net_heat, W
     
 def Customfftlayer(x_p,y_p):

@@ -2,7 +2,7 @@
 """
 Created on Thu Feb 16 21:25:36 2017
 
-@author: Zhendong Zhang
+@author: Zhangping He
 """
 import numpy as np
 import theano
@@ -65,10 +65,11 @@ def build_fft_scale(x,y,size):
     
     # return scale different: x_new/x_lod-1
     p_scale = ll.get_output(net)
-    p_scale = theano.gradient.disconnected_grad(p_scale)
+    #p_scale = theano.gradient.disconnected_grad(p_scale)
     net_scale = ll.InputLayer((None,10,25,25),p_scale)
-    net_scale = ll.DenseLayer(net_scale,2,b=None,nonlinearity=l.nonlinearities.tanh)
+    net_scale = ll.DenseLayer(net_scale,50,b=None,nonlinearity=l.nonlinearities.tanh)
     W.append(net_scale.get_params()[0])
+    net_scale = ll.DenseLayer(net_scale,2,b=None,nonlinearity=None)
     # return heatmap with 2 times upsample of size
     net_heat = ll.DenseLayer(net,size**2,b=None,nonlinearity=None)
     W.append(net_heat.get_params()[0])

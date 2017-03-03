@@ -158,7 +158,7 @@ def bgr2gray(x,keepdim=True):
         return xg
 
 def score2move(x,per=0.85):
-    s_0, s_1 = x.shape[0]/2+np.mod(x.shape[0],2)-1, x.shape[1]/2+np.mod(x.shape[1],2)-1
+    s_0, s_1 = np.int(x.shape[0]/2)+np.mod(x.shape[0],2)-1, np.int(x.shape[1]/2)+np.mod(x.shape[1],2)-1
     #x = x-np.min(x)
     #x = x/np.max(x)
     if False:
